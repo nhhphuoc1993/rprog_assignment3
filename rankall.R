@@ -1,12 +1,13 @@
 require(data.table)
-rankall <- function(outcome, num = "best") {
-  ## Read outcome data
-  data <- fread("outcome-of-care-measures.csv")
+rankall <- function(outcome, num = "best") {)
   
-  if(input_outcome == 'heart attack') col_name <- 'Hospital 30-Day Death (Mortality) Rates from Heart Attack'
-  else if (input_outcome == 'heart failure') col_name <- 'Hospital 30-Day Death (Mortality) Rates from Heart Failure'
-  else if (input_outcome == 'pneumonia') col_name <- 'Hospital 30-Day Death (Mortality) Rates from Pneumonia'
+  if(input_outcome == 'heart attack') selected_cols <- c('Hospital Name', 'State', 'Hospital 30-Day Death (Mortality) Rates from Heart Attack')
+  else if (input_outcome == 'heart failure') selected_cols <- c('Hospital Name', 'State', 'Hospital 30-Day Death (Mortality) Rates from Heart Failure')
+  else if (input_outcome == 'pneumonia') selected_cols <- c('Hospital Name', 'State', 'Hospital 30-Day Death (Mortality) Rates from Pneumonia')
   else stop('Invalid input outcome!')
+  
+  data <- fread("outcome-of-care-measures.csv", select = selected_cols)
+  setnames(data, selected_cols, c('hospital_name', 'state', 'rate'))
   
   if(input_num == 'best') {
     numeric_data <- data[!is.na(as.numeric(col_name))]
